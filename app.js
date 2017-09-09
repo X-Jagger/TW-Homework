@@ -10,7 +10,7 @@ function bookAndCancel(str, result) {
 		return false;
 	} else {
 		var matchArr = str.match(re).slice(1, 6);
-		console.log(matchArr)
+		//console.log(matchArr)
 		var id = matchArr[0];
 		var date = matchArr[1];
 		var startTime = matchArr[2].substr(0, 2); //小时数
@@ -44,6 +44,7 @@ function bookAndCancel(str, result) {
 			}
 		}
 		console.log("Success: the booking is accepted!")
+		console.log(result)
 		return true;
 	}
 }
@@ -69,7 +70,7 @@ function computedIncome(weekday, a, b) {
 			if (b <= 22) income = (b - a) * 60;
 		}
 		leftIncome = income / 2;
-		incomeArr.concat(income, leftIncome);
+		incomeArr = incomeArr.concat(income, leftIncome);
 	} else { //周六周日
 		if (a < 12) {
 			if (b <= 12) income = (b - a) * 40;
@@ -83,7 +84,7 @@ function computedIncome(weekday, a, b) {
 			if (b <= 22) income = (b - a) * 60;
 		}
 		leftIncome = income / 4;
-		incomeArr.concat(income, leftIncome);
+		incomeArr = incomeArr.concat(income, leftIncome);
 	}
 	return incomeArr;
 
@@ -91,4 +92,5 @@ function computedIncome(weekday, a, b) {
 module.exports = {
 	bookAndCancel,
 	result,
+	computedIncome,
 };

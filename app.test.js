@@ -3,10 +3,17 @@ import {
 } from 'chai';
 import {
 	bookAndCancel,
-	result
+	result,
+	computedIncome
 } from './app.js';
 // var add = require('./app.js');
 // var expect = require('chai').expect;
+
+/*
+test 收获
+result这个全局变量对每一个describe都是accessible
+
+*/
 
 describe('正则匹配的初步检查', function() {
 	// it('U123 2016-06-02 20:00~22:00 A C 应该通过', function() {
@@ -95,23 +102,22 @@ describe("时间的合法化检查", function() {
 })
 
 describe("预定和取消功能检测", function() {
-	it('U123 2016-06-02 20:00~22:00 A 预定成功', function() {
-		expect(bookAndCancel('U123 2016-06-02 20:00~22:00 A C', result)).to.be.true;
+	it('U123 2016-06-03 20:00~22:00 A 预定成功', function() {
+		expect(bookAndCancel('U123 2016-06-03 20:00~22:00 A', result)).to.be.true;
 	});
 	it('U123 2016-06-02 20:00~22:00 A C 取消成功', function() {
-		bookAndCancel('U123 2016-06-02 20:00~22:00 A', result);
 		expect(bookAndCancel('U123 2016-06-02 20:00~22:00 A C', result)).to.be.true;
 	});
 	it('U123 2016-06-02 22:00~22:00 时间错误预定失败', function() {
 		expect(bookAndCancel('U123 2016-06-02 22:00~22:00', result)).to.be.false;
 	});
-	it('U123 2016-12-03 20:00~22:00 B 预定成功', function() {
-		expect(bookAndCancel('U123 2016-12-03 20:00~22:00 B', result)).to.be.true;
+	it('U123 2016-12-01 20:00~22:00 B 预定成功', function() {
+		expect(bookAndCancel('U123 2016-12-01 20:00~22:00 B', result)).to.be.true;
 	});
 	it('U123 2016-12-02 20:00~22:00 A C 没有预定取消失败', function() {
 		expect(bookAndCancel('U123 2016-12-02 20:00~22:00 A C', result)).to.be.false;
 	});
-	it('U123 2016-12-02 20:00~22:00 B 已经被预定预定失败', function() {
-		expect(bookAndCancel('U123 2016-12-02 20:00~22:00 B', result)).to.be.false;
+	it('U123 2016-12-01 20:00~22:00 B 已经被预定预定失败', function() {
+		expect(bookAndCancel('U123 2016-12-01 20:00~22:00 B', result)).to.be.false;
 	});
 })
