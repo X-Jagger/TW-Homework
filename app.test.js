@@ -121,3 +121,10 @@ describe("预定和取消功能检测", function() {
 		expect(bookAndCancel('U123 2016-12-01 20:00~22:00 B', result)).to.be.false;
 	});
 })
+
+describe("收入汇总测试", function() {
+	it('收入汇总测试，输入一个空格 ', function() { //一个空格
+		expect(bookAndCancel(' ', result)).to.be.true;
+	});
+
+})

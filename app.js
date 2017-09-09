@@ -1,9 +1,28 @@
 //new Date('2017-03-32').toString() "Invalid Date"
 
-var result = {};
-var incomeSum = 0;
+var result = {
+	incomeSum: 0,
+	incomeA: 0,
+	incomeB: 0,
+	incomeC: 0,
+	incomeD: 0,
+};
+var reducedIncome;
 
 function bookAndCancel(str, result) {
+	//程序输出收入汇总
+
+	if (/^\s$/.test(str)) {
+		var str = `收入汇总\n---
+		场地：A${result.incomeA}\n小计：${result.incomeA}\n
+		场地：B${result.incomeB}\n小计：${result.incomeB}\n
+		场地：C${result.incomeC}\n小计：${result.incomeC}\n
+		场地：D${result.incomeD}\n小计：${result.incomeD}\n
+		---
+		总计：${result.incomeSum}`;
+		console.log(str);
+		return true;
+	}
 	var re = /^(\w+)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:00)~(\d{2}:00)\s+(([ABCD]\s*$)|([ABCD]\sC\s*$))/;
 	if (!re.test(str)) {
 		console.log("Error: the booking is invalid!")
@@ -31,14 +50,17 @@ function bookAndCancel(str, result) {
 			var bookedStr = info; //去除多余空格
 			if (!(bookedStr in result)) {
 				result[bookedStr] = incomeArr;
+				result.incomeSum += incomeArr[0];
 			} else {
 				console.log("Error: the booking conflicts with existing bookings!")
 				return false;
 			}
 		} else { //取消
 			var cancelStr = info.slice(0, -1); //去掉C
-			if (cancelStr in result) delete result[cancelStr];
-			else {
+			if (cancelStr in result) {
+				delete result[cancelStr];
+				result.incomeSum -= incomeArr[1];
+			} else {
 				console.log('Error: the booking being cancelled does not exist!')
 				return false;
 			}
@@ -69,8 +91,8 @@ function computedIncome(weekday, a, b) {
 		} else if (20 <= a && a < 22) {
 			if (b <= 22) income = (b - a) * 60;
 		}
-		leftIncome = income / 2;
-		incomeArr = incomeArr.concat(income, leftIncome);
+		reducedIncome = income / 2;
+		incomeArr = incomeArr.concat(income, reducedIncome);
 	} else { //周六周日
 		if (a < 12) {
 			if (b <= 12) income = (b - a) * 40;
@@ -83,8 +105,8 @@ function computedIncome(weekday, a, b) {
 		} else if (18 <= a && a < 22) {
 			if (b <= 22) income = (b - a) * 60;
 		}
-		leftIncome = income / 4;
-		incomeArr = incomeArr.concat(income, leftIncome);
+		reducedIncome = income / 4 * 3;
+		incomeArr = incomeArr.concat(income, reducedIncome);
 	}
 	return incomeArr;
 
