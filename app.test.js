@@ -3,26 +3,14 @@ import {
 } from 'chai';
 import {
 	bookAndCancel,
-	result,
-	computedIncome,
-	deleteIncome,
-	income
-} from './app.js';
-// var add = require('./app.js');
-// var expect = require('chai').expect;
-
-/*
-test 收获
-result这个全局变量对每一个describe都是accessible
-
-*/
+} from './app-for-test.js';
 
 describe('正则匹配的初步检查', function() {
 	// it('U123 2016-06-02 20:00~22:00 A C 应该通过', function() {
 	// 	expect(bookAndCancel('U123 2016-06-02 20:00~22:00 A C')).to.be.true;
 	// });
-	it('U123 2016-06-02 20:00~22:00 A 应该通过', function() {
-		expect(bookAndCancel('U123 2016-06-02 20:00~22:00 A')).to.be.true;
+	it('U123 2016-06-01 20:00~22:00 A 应该通过', function() {
+		expect(bookAndCancel('U123 2016-06-01 20:00~22:00 A')).to.be.true;
 	});
 	it('U123 2016-06-02 20:00~22:00 不应该通过', function() {
 		expect(bookAndCancel('U123 2016-06-02 20:00~22:00')).to.be.false;
