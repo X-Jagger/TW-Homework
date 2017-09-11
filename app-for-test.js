@@ -20,6 +20,7 @@ ${printedIncome(income.C)}
 ${printedIncome(income.D)}---
 总计：${income.incomeSum}`;
 		console.log(resultRext);
+		console.log(result)
 		return true;
 	}
 	var re = /^(\w+)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:00)~(\d{2}:00)\s+(([ABCD]\s*$)|([ABCD]\sC\s*$))/;
@@ -29,9 +30,11 @@ ${printedIncome(income.D)}---
 		return false;
 	} else {
 		var matchArr = str.match(re).slice(1, 6);
+		console.log(matchArr);
 		var date = matchArr[1];
 		var startTime = matchArr[2].substr(0, 2); //小时数
 		var endTime = matchArr[3].substr(0, 2);
+		var status = matchArr[4].slice(0, 1); // ABCD
 		var isDate = new Date(date).toString() !== "Invalid Date" ? true : false;
 		var isTime = (endTime > startTime) && (endTime <= 22 && startTime >= 9) ? true : false;
 		if (!isDate || !isTime) {
@@ -44,12 +47,12 @@ ${printedIncome(income.D)}---
 		//预定和取消
 
 		//首先去除多余空格
-		var allInfo = matchArr.join("").replace(/\s+/, '');
+		var allInfo = matchArr.join("").replace(/\s+/g, '');
 		//如果是预定
 		var isbook = !/^[ABCD]C$/.test(allInfo.slice(-2));
 		if (isbook) {
 			var bookedStr = allInfo;
-			if (!(bookedStr in result)) {
+			if (notConflict(date, startTime, endTime, status)) {
 				result[bookedStr] = incomeArr;
 				addIncome(bookedStr, incomeArr, income);
 
@@ -72,6 +75,25 @@ ${printedIncome(income.D)}---
 		console.log("Success: the booking is accepted!");
 		return true;
 	}
+}
+//判断是否日期时间场地冲突
+function notConflict(date, startTime, endTime, status) {
+	var _re = /(\d{4}-\d{2}-\d{2})(\d{2}:00)(\d{2}:00)(\w)/;
+	var resultArr = Object.keys(result);
+	var isconflict = true;
+	resultArr.forEach(function(v) {
+
+		var _arr = v.match(_re).slice(1, 5);
+		var _date = _arr[0];
+		var _startTime = _arr[1].slice(0, 2);
+		var _endTime = _arr[2].slice(0, 2);
+		var _status = _arr[3];
+
+		if (_date == date && _status == status && !(_startTime >= endTime || _endTime <= startTime)) {
+			isconflict = false;
+		}
+	})
+	return isconflict;
 }
 
 //单个场地收入输出

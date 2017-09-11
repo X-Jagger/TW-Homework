@@ -124,9 +124,24 @@ describe("预定和取消功能检测", function() {
 	});
 })
 
+describe("预定时间冲突检测", function() {
+	it('U123 2016-12-01 19:00~21:00 B 时间冲突失败', function() {
+		expect(bookAndCancel('U123 2016-12-01 19:00~21:00 B')).to.be.false;
+	});
+})
+describe("预定时间冲突检测", function() {
+	it('U123 2016-12-01 19:00~21:00 B 时间冲突失败', function() {
+		expect(bookAndCancel('U123 2016-12-01 19:00~21:00 B')).to.be.false;
+	});
+})
+describe("预定时间冲突检测", function() {
+	it('U123 2016-12-01 19:00~21:00 B 时间冲突失败', function() {
+		expect(bookAndCancel('U123 2016-12-01 19:00~21:00 B')).to.be.false;
+	});
+})
+
 describe("收入汇总测试", function() {
 	it('收入汇总测试，输入一个空格 ', function() { //一个空格
 		expect(bookAndCancel(' ')).to.be.true;
 	});
-
 })
