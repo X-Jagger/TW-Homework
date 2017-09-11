@@ -9,19 +9,55 @@ var income = {
 	C: [],
 	D: [],
 }; //账单
+
+
+//时间排序
+//格式输出
+//处理一个场地的情况
+function printedIncome(place) {
+	var printedResult = [];
+	var re = /(\d{4}-\d{2}-\d{2})(\d{2}:00)(\d{2}:00)/;
+	printedResult.income = 0;
+	place.forEach((v) => {
+			var info = Object.keys(v)[0];
+			var payInfo = v[info];
+			//console.log(info, payInfo)
+			var money = ("" + payInfo).match(/\d+/)[0];
+			printedResult.income += +money;
+			var arr = info.match(re).slice(1, 4);
+			var str = `${arr[0]} ${arr[1]}~${arr[2]} ${payInfo}元\n`;
+			//console.log(str);
+			printedResult.push(str)
+		})
+		// var x = 'U1232016-06-0320:0022:00A'.match(re).slice(1, 4)
+		// 	//["2016-06-03", "20:00", "22:00"]
+	var str = '小计：' + printedResult.income + "元\n";
+	printedResult.push(str);
+	return printedResult.sort().join('');
+}
+
+
 function bookAndCancel(str) {
 	//程status序输出收入汇总
 
 	if (/^\s$/.test(str)) {
-		var str = `收入汇总\n---
-		场地：A${income.A}\n小计：${income.A}\n
-		场地：B${income.B}\n小计：${income.B}\n
-		场地：C${income.C}\n小计：${income.C}\n
-		场地：D${income.D}\n小计：${income.D}\n
-		---
-		总计：${income.incomeSum}`;
-		console.log(income);
-		console.log(result);
+		var str = `
+收入汇总
+---
+场地：A
+${printedIncome(income.A)}
+场地：B
+${printedIncome(income.B)}
+场地：C
+${printedIncome(income.C)}
+场地：D
+${printedIncome(income.D)}---
+总计：${income.incomeSum}`;
+
+
+		console.log(str);
+		// console.log(income);
+		// console.log(result);
 		return true;
 	}
 	var re = /^(\w+)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:00)~(\d{2}:00)\s+(([ABCD]\s*$)|([ABCD]\sC\s*$))/;
@@ -152,22 +188,22 @@ function cancelIncome(cancelStr, incomeArr, income) {
 	switch (status) {
 		case 'A':
 			var obj = {};
-			obj[cancelStr] = incomeArr[1];
+			obj[cancelStr] = "违约金" + " " + incomeArr[1];
 			income.A.push(obj)
 			break;
 		case 'B':
 			var obj = {};
-			obj[cancelStr] = incomeArr[1];
+			obj[cancelStr] = "违约金" + " " + incomeArr[1];
 			income.B.push(obj)
 			break;
 		case 'C':
 			var obj = {};
-			obj[cancelStr] = incomeArr[1];
+			obj[cancelStr] = "违约金" + " " + incomeArr[1];
 			income.C.push(obj)
 			break;
 		case 'D':
 			var obj = {};
-			obj[cancelStr] = incomeArr[1];
+			obj[cancelStr] = "违约金" + " " + incomeArr[1];
 			income.D.push(obj)
 			break;
 	}
