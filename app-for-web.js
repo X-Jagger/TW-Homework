@@ -8,20 +8,7 @@ var income = { //账单
 };
 //主函数，处理输入
 function bookAndCancel(str) {
-	if (/^\s$/.test(str)) {
-		var resultRext = `
-收入汇总
-${printedIncome(income.A)}
-场地：B
-${printedIncome(income.B)}
-场地：C
-${printedIncome(income.C)}
-场地：D
-${printedIncome(income.D)}---
-总计：${income.incomeSum}`;
-		textarea.innerHTML = (resultRext);
-		return true;
-	}
+
 	var re = /^(\w+)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:00)~(\d{2}:00)\s+(([ABCD]\s*$)|([ABCD]\sC\s*$))/;
 	//基本格式正则判断
 	if (!re.test(str)) {
@@ -123,16 +110,16 @@ function computedIncome(weekday, a, b) {
 	if (weekday < 6) { //周一到周五
 		if (a < 12) {
 			if (b <= 12) income = (b - a) * 30;
-			else if (12 < b && b <= 18) income = 90 + (b - 12) * 50;
-			else if (18 < b && b <= 20) income = 390 + (b - 18) * 80;
-			else if (20 < b && b <= 22) income = 550 + (b - 20) * 60;
+			else if (12 < b && b <= 18) income = (12 - a) * 30 + (b - 12) * 50;
+			else if (18 < b && b <= 20) income = (12 - a) * 30 + 300 + (b - 18) * 80;
+			else if (20 < b && b <= 22) income = (12 - a) * 30 + 460 + (b - 20) * 60;
 		} else if (12 <= a && a < 18) {
 			if (b <= 18) income = (b - a) * 50;
-			else if (18 < b && b <= 20) income = 300 + (b - 18) * 80;
-			else if (20 < b && b <= 22) income = 460 + (b - 20) * 60;
+			else if (18 < b && b <= 20) income = (18 - a) * 50 + (b - 18) * 80;
+			else if (20 < b && b <= 22) income = (18 - a) * 50 + 160 + (b - 20) * 60;
 		} else if (18 <= a && a < 20) {
 			if (b <= 20) income = (b - a) * 80;
-			else if (20 < b && b <= 22) income = 160 + (b - 20) * 60;
+			else if (20 < b && b <= 22) income = (20 - a) * 80 + (b - 20) * 60;
 		} else if (20 <= a && a < 22) {
 			if (b <= 22) income = (b - a) * 60;
 		}
@@ -141,12 +128,12 @@ function computedIncome(weekday, a, b) {
 	} else { //周六周日
 		if (a < 12) {
 			if (b <= 12) income = (b - a) * 40;
-			else if (12 < b && b <= 18) income = 120 + (b - 12) * 50;
-			else if (18 < b && b <= 22) income = 390 + (b - 18) * 80;
+			else if (12 < b && b <= 18) income = (12 - a) * 40 + (b - 12) * 50;
+			else if (18 < b && b <= 22) income = (12 - a) * 40 + 300 + (b - 18) * 80;
 
 		} else if (12 <= a && a < 18) {
 			if (b <= 18) income = (b - a) * 50;
-			else if (18 < b && b <= 22) income = 300 + (b - 18) * 60;
+			else if (18 < b && b <= 22) income = (18 - a) * 50 + (b - 18) * 60;
 		} else if (18 <= a && a < 22) {
 			if (b <= 22) income = (b - a) * 60;
 		}
@@ -231,10 +218,27 @@ function deleteIncome(status, cancelStr, income) {
 
 function clickEvent() {
 	var textarea = document.getElementById('textarea');
-	var btn = document.getElementById("submit");
+	var submit = document.getElementById("submit");
 	var input = document.getElementById("input");
 	var value;
-	btn.onclick = function(e) {
+	var print = document.getElementById("print");
+	print.onclick = function(e) {
+		e.preventDefault();
+
+		var resultRext = `
+收入汇总
+${printedIncome(income.A)}
+场地：B
+${printedIncome(income.B)}
+场地：C
+${printedIncome(income.C)}
+场地：D
+${printedIncome(income.D)}---
+总计：${income.incomeSum}元`;
+		textarea.innerHTML = (resultRext);
+		input.value = "";
+	}
+	submit.onclick = function(e) {
 		e.preventDefault();
 		value = input.value;
 		bookAndCancel(value);
@@ -242,7 +246,3 @@ function clickEvent() {
 	}
 }
 clickEvent();
-
-// module.exports = {
-// 	bookAndCancel,
-// };

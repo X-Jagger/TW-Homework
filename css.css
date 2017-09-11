@@ -48,6 +48,7 @@ button:active
 }
 
 textarea{
+
 	border-radius: 5px;
 	margin-top: 20px;
 	display: inline-block;
@@ -60,4 +61,5 @@ textarea{
 }
 #textarea{
 	background-color: #F8F8FF;
+	
 }

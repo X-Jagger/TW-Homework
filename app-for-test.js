@@ -125,16 +125,16 @@ function computedIncome(weekday, a, b) {
 	if (weekday < 6) { //周一到周五
 		if (a < 12) {
 			if (b <= 12) income = (b - a) * 30;
-			else if (12 < b && b <= 18) income = 90 + (b - 12) * 50;
-			else if (18 < b && b <= 20) income = 390 + (b - 18) * 80;
-			else if (20 < b && b <= 22) income = 550 + (b - 20) * 60;
+			else if (12 < b && b <= 18) income = (12 - a) * 30 + (b - 12) * 50;
+			else if (18 < b && b <= 20) income = (12 - a) * 30 + 300 + (b - 18) * 80;
+			else if (20 < b && b <= 22) income = (12 - a) * 30 + 460 + (b - 20) * 60;
 		} else if (12 <= a && a < 18) {
 			if (b <= 18) income = (b - a) * 50;
-			else if (18 < b && b <= 20) income = 300 + (b - 18) * 80;
-			else if (20 < b && b <= 22) income = 460 + (b - 20) * 60;
+			else if (18 < b && b <= 20) income = (18 - a) * 50 + (b - 18) * 80;
+			else if (20 < b && b <= 22) income = (18 - a) * 50 + 160 + (b - 20) * 60;
 		} else if (18 <= a && a < 20) {
 			if (b <= 20) income = (b - a) * 80;
-			else if (20 < b && b <= 22) income = 160 + (b - 20) * 60;
+			else if (20 < b && b <= 22) income = (20 - a) * 80 + (b - 20) * 60;
 		} else if (20 <= a && a < 22) {
 			if (b <= 22) income = (b - a) * 60;
 		}
@@ -143,12 +143,12 @@ function computedIncome(weekday, a, b) {
 	} else { //周六周日
 		if (a < 12) {
 			if (b <= 12) income = (b - a) * 40;
-			else if (12 < b && b <= 18) income = 120 + (b - 12) * 50;
-			else if (18 < b && b <= 22) income = 390 + (b - 18) * 80;
+			else if (12 < b && b <= 18) income = (12 - a) * 40 + (b - 12) * 50;
+			else if (18 < b && b <= 22) income = (12 - a) * 40 + 300 + (b - 18) * 80;
 
 		} else if (12 <= a && a < 18) {
 			if (b <= 18) income = (b - a) * 50;
-			else if (18 < b && b <= 22) income = 300 + (b - 18) * 60;
+			else if (18 < b && b <= 22) income = (18 - a) * 50 + (b - 18) * 60;
 		} else if (18 <= a && a < 22) {
 			if (b <= 22) income = (b - a) * 60;
 		}
