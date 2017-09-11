@@ -21,7 +21,7 @@ function bookAndCancel(str) {
 		var startTime = matchArr[2].substr(0, 2); //小时数
 		var endTime = matchArr[3].substr(0, 2);
 		var status = matchArr[4].slice(0, 1); // ABCD
-		var isDate = new Date(date).toString() !== "Invalid Date" ? true : false;
+		var isDate = (new Date(date).toString().split(' ')[2] == date.slice(-2)) ? true : false;
 		var isTime = (endTime > startTime) && (endTime <= 22 && startTime >= 9) ? true : false;
 		if (!isDate || !isTime) {
 			textarea.innerHTML = ("Error: the booking is invalid!");
@@ -217,7 +217,24 @@ function deleteIncome(status, cancelStr, income) {
 }
 
 function clickEvent() {
+	var testStr = `
+可供测试1
+abcdefghijklmnopqrst1234567890
+U001 2016-06-02 22:00~22:00 A
+U002 2017-08-01 19:00~22:00 A
+U003 2017-08-02 13:00~17:00 B
+U004 2017-08-03 15:00~16:00 C
+U005 2017-08-05 09:00~11:00 D
+可供测试2
+U002 2017-08-01 19:00~22:00 C
+U003 2017-08-01 18:00~20:00 A
+U002 2017-08-01 19:00~22:00 A C
+U002 2017-08-01 19:00~22:00 A C
+U003 2017-08-01 18:00~20:00 A
+U003 2017-08-02 13:00~17:00 C
+请复制粘贴食用 :)`;
 	var textarea = document.getElementById('textarea');
+	textarea.innerHTML = testStr;
 	var submit = document.getElementById("submit");
 	var input = document.getElementById("input");
 	var value;
@@ -227,6 +244,7 @@ function clickEvent() {
 
 		var resultRext = `
 收入汇总
+---
 ${printedIncome(income.A)}
 场地：B
 ${printedIncome(income.B)}
@@ -243,6 +261,10 @@ ${printedIncome(income.D)}---
 		value = input.value;
 		bookAndCancel(value);
 		input.value = "";
+	}
+	input.onfocus = function(e) {
+		e.preventDefault();
+		textarea.innerHTML = testStr;
 	}
 }
 clickEvent();

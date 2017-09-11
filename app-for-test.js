@@ -18,7 +18,7 @@ ${printedIncome(income.B)}
 ${printedIncome(income.C)}
 场地：D
 ${printedIncome(income.D)}---
-总计：${income.incomeSum}`;
+总计：${income.incomeSum}元`;
 		console.log(resultRext);
 		console.log(result)
 		return true;
@@ -35,7 +35,7 @@ ${printedIncome(income.D)}---
 		var startTime = matchArr[2].substr(0, 2); //小时数
 		var endTime = matchArr[3].substr(0, 2);
 		var status = matchArr[4].slice(0, 1); // ABCD
-		var isDate = new Date(date).toString() !== "Invalid Date" ? true : false;
+		var isDate = (new Date(date).toString().split(' ')[2] == date.slice(-2)) ? true : false;
 		var isTime = (endTime > startTime) && (endTime <= 22 && startTime >= 9) ? true : false;
 		if (!isDate || !isTime) {
 			console.log("Error: the booking is invalid!");

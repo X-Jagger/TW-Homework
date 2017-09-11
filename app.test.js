@@ -140,49 +140,50 @@ import {
 // 	});
 // })
 
-// describe("题目测试1", function() {
-// 	it('abcdefghijklmnopqrst1234567890', function() {
-// 		expect(bookAndCancel('abcdefghijklmnopqrst1234567890')).to.be.false;
-// 	});
-// 	it('U001 2016-06-02 22:00~22:00 A', function() {
-// 		expect(bookAndCancel('U001 2016-06-02 22:00~22:00 A')).to.be.false;
-// 	});
-// 	it('U002 2017-08-01 19:00~22:00 A', function() {
-// 		expect(bookAndCancel('U002 2017-08-01 19:00~22:00 A')).to.be.true;
-// 	});
-// 	it('U003 2017-08-02 13:00~17:00 B', function() {
-// 		expect(bookAndCancel('U003 2017-08-02 13:00~17:00 B')).to.be.true;
-// 	});
-// 	it('U004 2017-08-03 15:00~16:00 C', function() {
-// 		expect(bookAndCancel('U004 2017-08-03 15:00~16:00 C')).to.be.true;
-// 	});
-// 	it('U005 2017-08-05 09:00~11:00 D', function() {
-// 		expect(bookAndCancel('U005 2017-08-05 09:00~11:00 D')).to.be.true;
-// 	});
+describe("题目测试1", function() {
 
-// })
-
-describe("题目测试2", function() {
+	it('abcdefghijklmnopqrst1234567890', function() {
+		expect(bookAndCancel('abcdefghijklmnopqrst1234567890')).to.be.false;
+	});
+	it('U001 2016-06-02 22:00~22:00 A', function() {
+		expect(bookAndCancel('U001 2016-06-02 22:00~22:00 A')).to.be.false;
+	});
 	it('U002 2017-08-01 19:00~22:00 A', function() {
 		expect(bookAndCancel('U002 2017-08-01 19:00~22:00 A')).to.be.true;
-	});
-	it('U003 2017-08-01 18:00~20:00 A', function() {
-		expect(bookAndCancel('U003 2017-08-01 18:00~20:00 A')).to.be.false;
-	});
-	it('U002 2017-08-01 19:00~22:00 A C', function() {
-		expect(bookAndCancel('U002 2017-08-01 19:00~22:00 A C')).to.be.true;
-	});
-	it('U002 2017-08-01 19:00~22:00 A C', function() {
-		expect(bookAndCancel('U002 2017-08-01 19:00~22:00 A C')).to.be.false;
-	});
-	it('U003 2017-08-01 18:00~20:00 A', function() {
-		expect(bookAndCancel('U003 2017-08-01 18:00~20:00 A')).to.be.true;
 	});
 	it('U003 2017-08-02 13:00~17:00 B', function() {
 		expect(bookAndCancel('U003 2017-08-02 13:00~17:00 B')).to.be.true;
 	});
+	it('U004 2017-08-03 15:00~16:00 C', function() {
+		expect(bookAndCancel('U004 2017-08-03 15:00~16:00 C')).to.be.true;
+	});
+	it('U005 2017-08-05 09:00~11:00 D', function() {
+		expect(bookAndCancel('U005 2017-08-05 09:00~11:00 D')).to.be.true;
+	});
 
 })
+
+// describe("题目测试2", function() {
+// 	it('U002 2017-08-01 19:00~22:00 C', function() {
+// 		expect(bookAndCancel('U002 2017-08-01 19:00~22:00 C')).to.be.true;
+// 	});
+// 	it('U003 2017-08-01 18:00~20:00 A', function() {
+// 		expect(bookAndCancel('U003 2017-08-01 18:00~20:00 A')).to.be.false;
+// 	});
+// 	it('U002 2017-08-01 19:00~22:00 A C', function() {
+// 		expect(bookAndCancel('U002 2017-08-01 19:00~22:00 A C')).to.be.true;
+// 	});
+// 	it('U002 2017-08-01 19:00~22:00 A C', function() {
+// 		expect(bookAndCancel('U002 2017-08-01 19:00~22:00 A C')).to.be.false;
+// 	});
+// 	it('U003 2017-08-01 18:00~20:00 A', function() {
+// 		expect(bookAndCancel('U003 2017-08-01 18:00~20:00 A')).to.be.true;
+// 	});
+// 	it('U003 2017-08-02 13:00~17:00 C', function() {
+// 		expect(bookAndCancel('U003 2017-08-02 13:00~17:00 C')).to.be.true;
+// 	});
+
+// })
 
 describe("收入汇总测试", function() {
 	it('收入汇总测试，输入一个空格 ', function() { //一个空格
