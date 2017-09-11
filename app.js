@@ -56,8 +56,8 @@ ${printedIncome(income.D)}---
 
 
 		console.log(str);
-		// console.log(income);
-		// console.log(result);
+		console.log(income);
+		console.log(result);
 		return true;
 	}
 	var re = /^(\w+)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:00)~(\d{2}:00)\s+(([ABCD]\s*$)|([ABCD]\sC\s*$))/;
@@ -82,9 +82,12 @@ ${printedIncome(income.D)}---
 		var incomeArr = computedIncome(weekday, startTime, endTime)
 
 		//预定
-		var allInfo = matchArr.join("").replace(/\s+/, '');
-		var incomeInfo = matchArr
-		if (status.indexOf('C') < 1) {
+		var allInfo = matchArr.join("").replace(/\s+/, ''); //去除多余空格
+		//var incomeInfo = matchArr;
+
+		//如果是预定
+		var isbook = !/^[ABCD]C$/.test(allInfo.slice(-2));
+		if (isbook) {
 			var bookedStr = allInfo; //去除多余空格
 			if (!(bookedStr in result)) {
 				result[bookedStr] = incomeArr;
@@ -183,7 +186,7 @@ function addIncome(bookedStr, incomeArr, income) {
 
 //取消预定后的账单
 function cancelIncome(cancelStr, incomeArr, income) {
-	var status = cancelStr.slice(-1); //哪一组
+	var status = cancelStr.slice(-1); //A/B/C/D
 	deleteIncome(status, cancelStr, income); //删除预定时的原账单
 	switch (status) {
 		case 'A':
@@ -216,10 +219,13 @@ function deleteIncome(status, cancelStr, income) {
 	var len = arr.length;
 	for (var i = 0; i < len; i++) {
 		if (cancelStr in arr[i]) {
-			arr.splice(i, 1);
-			break;
+			if ((typeof arr[i][cancelStr]) === "number") {
+				var x = arr.splice(i, 1);
+				break;
+			}
 		}
 	}
+	//console.log("删除了一个预定后", arr)
 }
 module.exports = {
 	bookAndCancel,

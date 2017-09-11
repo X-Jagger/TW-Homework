@@ -107,8 +107,20 @@ describe("预定和取消功能检测", function() {
 	it('U123 2016-06-03 20:00~22:00 A 预定成功', function() {
 		expect(bookAndCancel('U123 2016-06-03 20:00~22:00 A')).to.be.true;
 	});
-	it('U123 2016-06-02 20:00~22:00 A C 取消成功', function() {
-		expect(bookAndCancel('U123 2016-06-02 20:00~22:00 A C')).to.be.true;
+	it('U123 2016-06-03 20:00~22:00 A C 取消成功', function() {
+		expect(bookAndCancel('U123 2016-06-03 20:00~22:00 A C')).to.be.true;
+	});
+	it('U123 2016-06-03 20:00~22:00 A 再次预定成功', function() {
+		expect(bookAndCancel('U123 2016-06-03 20:00~22:00 A')).to.be.true;
+	});
+	it('U123 2016-06-03 20:00~22:00 A C 再次取消成功', function() {
+		expect(bookAndCancel('U123 2016-06-03 20:00~22:00 A C')).to.be.true;
+	});
+	it('U123 2016-06-03 20:00~22:00 A 3rd次预定成功', function() {
+		expect(bookAndCancel('U123 2016-06-03 20:00~22:00 A')).to.be.true;
+	});
+	it('U123 2016-06-03 20:00~22:00 A C 3rd次取消成功', function() {
+		expect(bookAndCancel('U123 2016-06-03 20:00~22:00 A C')).to.be.true;
 	});
 	it('U123 2016-06-02 22:00~22:00 时间错误预定失败', function() {
 		expect(bookAndCancel('U123 2016-06-02 22:00~22:00')).to.be.false;
