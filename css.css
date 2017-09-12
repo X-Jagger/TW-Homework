@@ -10,7 +10,6 @@ body{
   height: 100%;
   width:100%;
   text-align: center;
-  
 }
 img{
 	max-width: 100%; 
@@ -62,4 +61,8 @@ textarea{
 #textarea{
 	background-color: #F8F8FF;
 	
+}
+a{
+	text-decoration: none;
+	color:rgb(117, 117, 117);
 }
