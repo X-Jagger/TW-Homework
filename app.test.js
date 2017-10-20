@@ -180,9 +180,3 @@ describe("题目测试2", function() {
 	});
 
 })
-
-describe("收入汇总测试", function() {
-	it('收入汇总测试，输入一个空格 ', function() { //一个空格
-		expect(bookAndCancel(' ')).to.be.true;
-	});
-})

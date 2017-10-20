@@ -47,11 +47,10 @@ button:active
 }
 
 textarea{
-
 	border-radius: 5px;
 	margin-top: 20px;
 	display: inline-block;
-	text-align: center;
+	text-align: left;
 	border:none;
 	color: rgb(143,185,122);
 	font-size:18px;

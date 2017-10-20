@@ -1,36 +1,43 @@
-var result = {}; //成功预定订单
-var income = { //账单
+var result = {}; //存订单信息
+var income = { //收入信息
 	incomeSum: 0,
 	A: [],
 	B: [],
 	C: [],
 	D: [],
 };
+var place = 'ABCD'; //四个场地
+//测试信息
+var testStr = `
+可供测试1
+abcdefghijklmnopqrst1234567890
+U001 2016-06-02 22:00~22:00 A
+U002 2017-08-01 19:00~22:00 A
+U003 2017-08-02 13:00~17:00 B
+U004 2017-08-03 15:00~16:00 C
+U005 2017-08-05 09:00~11:00 D
+可供测试2
+U002 2017-08-01 19:00~22:00 C
+U003 2017-08-01 18:00~20:00 A
+U002 2017-08-01 19:00~22:00 A C
+U002 2017-08-01 19:00~22:00 A C
+U003 2017-08-01 18:00~20:00 A
+U003 2017-08-02 13:00~17:00 C
+请复制粘贴食用 :)`;
+
+
 //主函数，处理输入
 function bookAndCancel(str) {
-	if (/^\s$/.test(str)) {
-		var resultRext = `
-收入汇总
-${printedIncome(income.A)}
-场地：B
-${printedIncome(income.B)}
-场地：C
-${printedIncome(income.C)}
-场地：D
-${printedIncome(income.D)}---
-总计：${income.incomeSum}元`;
-		console.log(resultRext);
-		console.log(result)
-		return true;
-	}
-	var re = /^(\w+)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:00)~(\d{2}:00)\s+(([ABCD]\s*$)|([ABCD]\sC\s*$))/;
+	var re = new RegExp('^(\\w+)\\s+(\\d{4}-\\d{2}-\\d{2})\\s+(\\d{2}:00)~(\\d{2}:00)\\s+(([' + place + ']\\s*$)|([' + place + ']\\sC\\s*$))');
+	//var re = /^(\w+)\s+(\d{4}-\d{2}-\d{2})\s+(\d{2}:00)~(\d{2}:00)\s+(([ABCD]\s*$)|([ABCD]\sC\s*$))/;
+
 	//基本格式正则判断
 	if (!re.test(str)) {
-		console.log("Error: the booking is invalid!");
+		//textarea.innerHTML = ("Error: the booking is invalid!");
 		return false;
 	} else {
+		//str==["U001 2016-06-02 22:00~22:00 A C", "U001", "2016-06-02", "22:00", "22:00", "A C",..]
 		var matchArr = str.match(re).slice(1, 6);
-		console.log(matchArr);
 		var date = matchArr[1];
 		var startTime = matchArr[2].substr(0, 2); //小时数
 		var endTime = matchArr[3].substr(0, 2);
@@ -38,26 +45,34 @@ ${printedIncome(income.D)}---
 		var isDate = (new Date(date).toString().split(' ')[2] == date.slice(-2)) ? true : false;
 		var isTime = (endTime > startTime) && (endTime <= 22 && startTime >= 9) ? true : false;
 		if (!isDate || !isTime) {
-			console.log("Error: the booking is invalid!");
+			//textarea.innerHTML = ("Error: the booking is invalid!");
 			return false;
 		}
-		var weekday = new Date(date).getDay();
+		var weekday = new Date(date).getDay(); //1/2/3..
 		var incomeArr = computedIncome(weekday, startTime, endTime);
-
-		//预定和取消
-
-		//首先去除多余空格
+		var order = {
+				user: matchArr[0],
+				date: date,
+				startTime: startTime,
+				endTime: endTime,
+				status: status,
+				weekday: weekday,
+			}
+			//预定和取消
+			//首先去除多余空格：U0012016-06-0222:00~22:00AC
+			//console.log(order);
 		var allInfo = matchArr.join("").replace(/\s+/g, '');
+
 		//如果是预定
-		var isbook = !/^[ABCD]C$/.test(allInfo.slice(-2));
+		var isbook = !new RegExp('^[' + place + ']C$').test(allInfo.slice(-2));
+		//var isbook = !/^[ABCD]C$/.test(allInfo.slice(-2));
 		if (isbook) {
 			var bookedStr = allInfo;
 			if (notConflict(date, startTime, endTime, status)) {
 				result[bookedStr] = incomeArr;
-				addIncome(bookedStr, incomeArr, income);
-
+				addIncome(order, bookedStr, incomeArr, income);
 			} else {
-				console.log("Error: the booking conflicts with existing bookings!");
+				//textarea.innerHTML = ("Error:! the booking conflicts with existing bookings!");
 				return false;
 			}
 			//取消
@@ -65,55 +80,36 @@ ${printedIncome(income.D)}---
 			var cancelStr = allInfo.slice(0, -1); //去掉C
 			if (cancelStr in result) {
 				delete result[cancelStr];
-				cancelIncome(cancelStr, incomeArr, income);
+				cancelIncome(order, cancelStr, incomeArr, income);
 
 			} else {
-				console.log('Error: the booking being cancelled does not exist!');
+				//textarea.innerHTML = ('Error: the booking being cancelled does not exist!');
 				return false;
 			}
 		}
-		console.log("Success: the booking is accepted!");
+		//textarea.innerHTML = ("Success: the booking is accepted!");
 		return true;
 	}
 }
+
 //判断是否日期时间场地冲突
 function notConflict(date, startTime, endTime, status) {
 	var _re = /(\d{4}-\d{2}-\d{2})(\d{2}:00)(\d{2}:00)(\w)/;
 	var resultArr = Object.keys(result);
 	var isconflict = true;
-	resultArr.forEach(function(v) {
-
+	for (var i = 0; i < resultArr.length; i++) {
+		var v = resultArr[i];
 		var _arr = v.match(_re).slice(1, 5);
 		var _date = _arr[0];
 		var _startTime = _arr[1].slice(0, 2);
 		var _endTime = _arr[2].slice(0, 2);
 		var _status = _arr[3];
-
 		if (_date == date && _status == status && !(_startTime >= endTime || _endTime <= startTime)) {
 			isconflict = false;
+			break;
 		}
-	})
+	}
 	return isconflict;
-}
-
-//单个场地收入输出
-function printedIncome(place) {
-	var printedResult = [];
-	var re = /(\d{4}-\d{2}-\d{2})(\d{2}:00)(\d{2}:00)/;
-	printedResult.income = 0;
-	place.forEach((v) => {
-		var info = Object.keys(v)[0];
-		var payInfo = v[info];
-		var money = ("" + payInfo).match(/\d+/)[0];
-		printedResult.income += +money;
-		var arr = info.match(re).slice(1, 4);
-		var str = `${arr[0]} ${arr[1]}~${arr[2]} ${payInfo}元\n`;
-		printedResult.push(str)
-	});
-	var str = '小计：' + printedResult.income + "元\n";
-	printedResult.push(str);
-	//时间排序
-	return printedResult.sort().join('');
 }
 
 
@@ -158,66 +154,26 @@ function computedIncome(weekday, a, b) {
 	return incomeArr;
 
 }
-
 //预定，账单
-function addIncome(bookedStr, incomeArr, income) {
+function addIncome(order, bookedStr, incomeArr, income) {
 	var status = bookedStr.slice(-1); //哪一组
-	switch (status) {
-		case 'A':
-			var obj = {};
-			obj[bookedStr] = incomeArr[0];
-			income.A.push(obj);
-			break;
-		case 'B':
-			var obj = {};
-			obj[bookedStr] = incomeArr[0];
-			income.B.push(obj);
-			break;
-		case 'C':
-			var obj = {};
-			obj[bookedStr] = incomeArr[0];
-			income.C.push(obj);
-			break;
-		case 'D':
-			var obj = {};
-			obj[bookedStr] = incomeArr[0];
-			income.D.push(obj);
-			break;
-	}
+	order[bookedStr] = incomeArr[0];
+	income[status].push(order);
 	income.incomeSum += incomeArr[0];
+	//console.log(income)
 }
 
 //取消，账单
-function cancelIncome(cancelStr, incomeArr, income) {
-	var status = cancelStr.slice(-1); //A/B/C/D
+function cancelIncome(order, cancelStr, incomeArr, income) {
+	var status = cancelStr.slice(-1); // A/B/C/D
 	deleteIncome(status, cancelStr, income); //删除预定时的原账单
-	switch (status) {
-		case 'A':
-			var obj = {};
-			obj[cancelStr] = "违约金" + " " + incomeArr[1];
-			income.A.push(obj);
-			break;
-		case 'B':
-			var obj = {};
-			obj[cancelStr] = "违约金" + " " + incomeArr[1];
-			income.B.push(obj);
-			break;
-		case 'C':
-			var obj = {};
-			obj[cancelStr] = "违约金" + " " + incomeArr[1];
-			income.C.push(obj);
-			break;
-		case 'D':
-			var obj = {};
-			obj[cancelStr] = "违约金" + " " + incomeArr[1];
-			income.D.push(obj);
-			break;
-	}
+	order[cancelStr] = "违约金" + " " + incomeArr[1];
+	income[status].push(order);
 	income.incomeSum -= incomeArr[0];
 	income.incomeSum += incomeArr[1];
 }
 
-//账单中删除取消的订单
+//删除取消的订单
 function deleteIncome(status, cancelStr, income) {
 	var arr = income[status];
 	var len = arr.length;
@@ -231,6 +187,29 @@ function deleteIncome(status, cancelStr, income) {
 	}
 }
 
+//单个场地收入输出
+function printedIncome(place) {
+	var printedResult = [];
+	var re = /(\d{4}-\d{2}-\d{2})(\d{2}:00)(\d{2}:00)/;
+	printedResult.income = 0;
+	place.forEach((v) => {
+		var keys = Object.keys(v);
+		var len = keys.length;
+		var info = Object.keys(v)[len - 1];
+		var payInfo = v[info];
+		var money = ("" + payInfo).match(/\d+/)[0];
+		printedResult.income += +money;
+		var arr = info.match(re).slice(1, 4);
+		var str = `${arr[0]} ${arr[1]}~${arr[2]} ${payInfo}元\n`;
+		printedResult.push(str)
+	});
+	var str = '小计：' + printedResult.income + "元\n";
+	printedResult.push(str);
+	return printedResult.join('');
+}
+
+
+
 module.exports = {
-	bookAndCancel,
+	bookAndCancel
 };
